@@ -36,24 +36,39 @@ def get_page():
     page = requests.get(url, headers = user_agent, proxies=proxy)
     return page.text
 
-def parse_page(page):
-    #soup = BeautifulSoup(page.text, 'lxml')
-    soup = BeautifulSoup(page, 'lxml')
-    print(soup.prettify())
-    print('kek')
-
 def save_page_to_txt_file(page):
     file = open("db/hiddenme_page.txt","a") 
     file.writelines(page)
     file.close()
     print('file saving')
 
+def parse_page(page):
+    soup = BeautifulSoup(page, 'lxml')
+    table = soup.find('table')
+    rows = table.find('tbody').find_all('tr')
+    proxy_list = []
+    for row in rows:
+        columns = row.find_all('td')
+        columns = list(map(lambda x: x.text.strip(), columns))
+        proxy = {
+            'ip': columns[0],
+            'port': columns[1],
+            'country': columns[2],
+            'delay': columns[3],
+            'speed': columns[4],
+            'refresh_time': columns[5]
+        }
+        proxy_list.append(proxy)
+    print('end parsing')
+    return proxy_list
+
 
 #page = get_page() 
 #db["hidemy_site_page"] = page
 page = db["hidemy_site_page"]
-parse_page(page)
-
+proxy_list = parse_page(page)
+for proxy in proxy_list:
+    print(proxy['ip'])
 print('end')
 
 
