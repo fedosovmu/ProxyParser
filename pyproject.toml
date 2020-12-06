@@ -2,11 +2,13 @@
 name = "proxyparser"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["repl.it user <replituser@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-peewee = "^3.14.0"
+bs4 = "^0.0.1"
+lxml = "^4.6.2"
+html5lib = "^1.1"
 
 [tool.poetry.dev-dependencies]
 

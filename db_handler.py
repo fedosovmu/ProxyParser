@@ -26,7 +26,7 @@ class DbHandler:
         self.conn.commit()
 
     def connect(self):
-        self.conn = sqlite3.connect('proxy_list.db')
+        self.conn = sqlite3.connect('db/proxy_parser.db')
         self.cursor = self.conn.cursor()
 
     def close(self):
