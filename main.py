@@ -55,22 +55,24 @@ def parse_page(page):
             'port': columns[1],
             'country': columns[2],
             'delay': columns[3],
-            'speed': columns[4],
-            'refresh_time': columns[5]
+            'protocol': columns[4].split(',')[-1].strip().lower(),
+            'speed': columns[5],
+            'refresh_time': columns[6]
         }
         proxy_servers_list.append(proxy_server)
     return proxy_servers_list
 
-def print_proxy(proxy):
-    print('{}:{}'.format(proxy['ip'], proxy['port']))
+def print_proxy_as_url(proxy):
+    print('{}://{}:{}'.format(proxy['protocol'], proxy['ip'], proxy['port']))
 
 page = get_page() 
 #db["hidemy_site_page"] = page
 #page = db["hidemy_site_page"]
 proxy_list = parse_page(page)
 
+print('Получены прокси серверы:')
 for proxy in proxy_list:
-    print_proxy(proxy)
+    print_proxy_as_url(proxy)
 
 
 
