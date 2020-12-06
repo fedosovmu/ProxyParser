@@ -1,19 +1,12 @@
 import requests
-import lxml.html
+from bs4 import BeautifulSoup
 
-#url = "https://hidemy.name/ru/proxy-list/?type=hs#list"
 url = 'http://example.com/'
+page = requests.get(url)
 
-#page = requests.get(url)
-#tree = etree.fromstring(page.text)
+soup = BeautifulSoup(page.text, 'lxml')
+print(soup.prettify())
 
-html = lxml.html.fromstring('''\
-    <html><body onload="" color="white">
-      <p>Hi  !</p>
-    </body></html>
- ''')
-
-print(html.tag)
 
 
 
