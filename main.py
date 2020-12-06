@@ -24,16 +24,20 @@ def get_random_user_agent():
     return user_agent
 
 def get_page():
-    #url = 'https://hidemy.name/ru/proxy-list/?type=hs#list'
-    url = 'http://example.com/'
-    user_agent = {'User-agent': 'Mozilla/5.0'}
-    proxy = None
+    url = 'https://hidemy.name/ru/proxy-list/?type=hs#list'
+    #url = 'http://example.com/'
+    user_agent = {'User-agent': get_random_user_agent()}
+    proxy = get_free_proxy_url()
     page = requests.get(url, headers = user_agent, proxies=proxy)
+    return page
 
+def parse_page(page):
     soup = BeautifulSoup(page.text, 'lxml')
     print(soup.prettify())
 
-get_page()
+
+page = get_page()
+parse_page(page)
 
 
 
