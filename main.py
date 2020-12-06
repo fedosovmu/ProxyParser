@@ -46,11 +46,11 @@ def parse_page(page):
     soup = BeautifulSoup(page, 'lxml')
     table = soup.find('table')
     rows = table.find('tbody').find_all('tr')
-    proxy_list = []
+    proxy_servers_list = []
     for row in rows:
         columns = row.find_all('td')
         columns = list(map(lambda x: x.text.strip(), columns))
-        proxy = {
+        proxy_server = {
             'ip': columns[0],
             'port': columns[1],
             'country': columns[2],
@@ -58,18 +58,19 @@ def parse_page(page):
             'speed': columns[4],
             'refresh_time': columns[5]
         }
-        proxy_list.append(proxy)
-    print('end parsing')
-    return proxy_list
+        proxy_servers_list.append(proxy_server)
+    return proxy_servers_list
 
+def print_proxy(proxy):
+    print('{}:{}'.format(proxy['ip'], proxy['port']))
 
-#page = get_page() 
+page = get_page() 
 #db["hidemy_site_page"] = page
-page = db["hidemy_site_page"]
+#page = db["hidemy_site_page"]
 proxy_list = parse_page(page)
+
 for proxy in proxy_list:
-    print(proxy['ip'])
-print('end')
+    print_proxy(proxy)
 
 
 
