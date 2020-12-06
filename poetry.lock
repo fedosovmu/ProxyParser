@@ -60,6 +60,14 @@ source = ["Cython (>=0.29.7)"]
 
 [[package]]
 category = "main"
+description = "A package to get random user agents based filters provided by user"
+name = "random-user-agent"
+optional = false
+python-versions = "*"
+version = "1.0.1"
+
+[[package]]
+category = "main"
 description = "Python 2 and 3 compatibility utilities"
 name = "six"
 optional = false
@@ -84,7 +92,7 @@ python-versions = "*"
 version = "0.5.1"
 
 [metadata]
-content-hash = "27ffb4f0fc405654b69130c82a31b6e7203258d35fe8be5bdf18a182741067b4"
+content-hash = "3e1f497c73984760710b9f38b82b3dc5687a2cfce9388c8cb7800487555b5566"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -138,6 +146,10 @@ lxml = [
     {file = "lxml-4.6.2-cp39-cp39-win32.whl", hash = "sha256:2e6fd1b8acd005bd71e6c94f30c055594bbd0aa02ef51a22bbfa961ab63b2d75"},
     {file = "lxml-4.6.2-cp39-cp39-win_amd64.whl", hash = "sha256:535332fe9d00c3cd455bd3dd7d4bacab86e2d564bdf7606079160fa6251caacf"},
     {file = "lxml-4.6.2.tar.gz", hash = "sha256:cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc"},
+]
+random-user-agent = [
+    {file = "random_user_agent-1.0.1-py3-none-any.whl", hash = "sha256:535636a55fb63fe3d74fd0260d854c241d9f2946447026464e578e68eac17dac"},
+    {file = "random_user_agent-1.0.1.tar.gz", hash = "sha256:8f8ca26ec8cb1d24ad1758d8b8f700d154064d641dbe9a255cfec42960fbd012"},
 ]
 six = [
     {file = "six-1.15.0-py2.py3-none-any.whl", hash = "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"},
