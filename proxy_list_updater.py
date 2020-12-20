@@ -8,9 +8,10 @@ import datetime
 
 
 class ProxyListUpdater():
-    _proxy_list_path = 'proxy_list.txt'
+    _proxy_list_file_path = 'proxy_list.txt'
 
-    def get_random_user_agent(self):
+    @staticmethod
+    def get_random_user_agent():
         software_names = [SoftwareName.CHROME.value]
         operating_systems = [
             OperatingSystem.WINDOWS.value, OperatingSystem.LINUX.value
@@ -23,15 +24,15 @@ class ProxyListUpdater():
         user_agent = user_agent_rotator.get_random_user_agent()
         return user_agent
 
-    def _get_page(self):
+    @classmethod
+    def _get_page(cls):
         url = 'https://hidemy.name/ru/proxy-list/?type=hs#list'
-        #url = 'http://example.com/'
-        user_agent = {'User-agent': self.get_random_user_agent()}
-        #proxy = self._get_free_proxy_url()
+        user_agent = {'User-agent': cls.get_random_user_agent()}
         page = requests.get(url, headers=user_agent)
         return page.text
 
-    def _parse_page(self, page):
+    @classmethod
+    def _parse_page(cls, page):
         soup = BeautifulSoup(page, 'lxml')
         table = soup.find('table')
         rows = table.find('tbody').find_all('tr')
@@ -51,41 +52,51 @@ class ProxyListUpdater():
             proxy_servers_list.append(proxy_server)
         return proxy_servers_list
 
-    def _get_proxy_as_url(self, proxy):
+    @classmethod
+    def _get_proxy_as_url(cls, proxy):
 	    protocol = proxy['protocols'].split(',')[-1].strip().lower()
 	    return '{}://{}:{}'.format(protocol, proxy['ip'], proxy['port'])
 
-    def _parse_proxy_list(self):
-        page = self._get_page()
-        proxy_list = self._parse_page(page)
+    @classmethod
+    def _parse_proxy_list(cls):
+        page = cls._get_page()
+        proxy_list = cls._parse_page(page)
         return proxy_list        
 
-    def update_proxy_list(self):
+    @classmethod
+    def update_proxy_list(cls):
         today = date.today()
-        last_update = self.get_proxy_list_last_update_date()
-        print(type(today))
+        last_update = cls.get_proxy_list_last_update_date()
         if last_update == today:
             print('Список прокси-серверов уже обновлен')
         else:
             print('Обновление списка прокси-серверов...')
-            proxy_list = self._parse_proxy_list()
-            self._save_proxy_list(today, proxy_list)
+            proxy_list = cls._parse_proxy_list()
+            cls._save_proxy_list(today, proxy_list)
             print('Список обновлен')
 
-    def get_proxy_list_last_update_date(self):
-        with open(self._proxy_list_path, 'r') as proxy_list_file:
+    @classmethod
+    def get_proxy_list_last_update_date(cls):
+        with open(cls._proxy_list_file_path, 'r') as proxy_list_file:
             proxy_list_json = json.load(proxy_list_file)
         last_update_date_str = proxy_list_json['last_update_date']
         last_update_date_obj = datetime.datetime.strptime(last_update_date_str, "%Y-%m-%d").date()
         return last_update_date_obj
 
-    def _save_proxy_list(self, update_date, proxy_list):
+    @classmethod
+    def _save_proxy_list(cls, update_date, proxy_list):
         proxy_list_with_update_date = {
             'last_update_date': str(update_date),
-            'proxies': list(map(self._get_proxy_as_url, proxy_list))
+            'proxies': list(map(cls._get_proxy_as_url, proxy_list))
         }
 
         proxy_list_with_update_date_as_json = json.dumps(proxy_list_with_update_date, indent=4, sort_keys=True)
 
-        with open(self._proxy_list_path, 'wt') as proxy_list_file:
+        with open(cls._proxy_list_file_path, 'wt') as proxy_list_file:
             proxy_list_file.write(str(proxy_list_with_update_date_as_json))
+
+    @classmethod
+    def load_proxy_list(cls):
+        with open(cls._proxy_list_file_path, 'r') as proxy_list_file:
+            proxy_list_json = json.load(proxy_list_file)
+            return proxy_list_json['proxies']
