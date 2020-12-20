@@ -5,6 +5,7 @@ from random_user_agent.params import SoftwareName, OperatingSystem
 from replit import db
 import json
 from datetime import date
+from datetime.datetime import strptime
 
 
 
@@ -88,17 +89,21 @@ class ProxyListUpdater():
     def update_proxy_list(self):
         today = date.today()
         last_update = self.get_proxy_list_last_update_date()
-        if last_update != today:
-            print('Список проксисерверов уже обновлялся')
+        print(type(today))
+        if last_update == today:
+            print('Список проксисерверов уже обновлен')
         else:
+            print('Обновление списка прокси серверов')
             proxy_list = self.parse_proxy_list()
             self.save_proxy_list(today, proxy_list)
 
 
     def get_proxy_list_last_update_date(self):
         with open(self._proxy_list_path, 'r') as proxy_list_file:
-            pass
-        return date.today()
+            proxy_list_json = json.load(proxy_list_file)
+        last_update_date_as_string = proxy_list_json['last_update_date']
+        last_update_date = strptime(last_update_date_as_string, "Y-%m-%d").date()
+        return last_update_date
 
     def save_proxy_list(self, update_date, proxy_list):
         proxy_list_with_update_date = {
